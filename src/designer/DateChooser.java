@@ -1,8 +1,7 @@
 package designer;
 
-import com.formdev.flatlaf.extras.components.FlatButton;
-import com.formdev.flatlaf.extras.components.FlatToolBar;
-import com.formdev.flatlaf.ui.*;
+import com.formdev.flatlaf.ui.FlatArrowButton;
+import com.formdev.flatlaf.ui.FlatRoundBorder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +22,7 @@ public class DateChooser extends JPanel {
     /**
      * calendario
      */
-    private Calendar cal;
+    private final Calendar cal;
 
     /**
      * giorno scelto
@@ -41,29 +40,29 @@ public class DateChooser extends JPanel {
     /**
      * giorno corrente
      */
-    private int giornoCorrente;
+    private final int giornoCorrente;
     /**
      * mese corrente
      */
-    private int meseCorrente;
+    private final int meseCorrente;
     /**
      * anno corrente
      */
-    private int annoCorrente;
+    private final int annoCorrente;
 
     /**
      * label per la data scelta
      */
-    private JLabel dataLabel;
+    private final JLabel dataLabel;
     /**
      * bottone per la scelta della data
      */
-    private JButton scegliData;
+    private final JButton scegliData;
 
     /**
      * popup per mostrare il calendario
      */
-    private JPopupMenu popup;
+    private final JPopupMenu popup;
     /**
      * layout di tutto il calendario
      */
@@ -80,6 +79,36 @@ public class DateChooser extends JPanel {
      * bottone della giornata corrente
      */
     private JButton bottoneGiornoCorrente;
+
+    public DateChooser() {
+        super(new GridBagLayout());
+
+        cal = Calendar.getInstance();
+
+        giornoCorrente = cal.get(Calendar.DATE);
+        meseCorrente = cal.get(Calendar.MONTH);
+        annoCorrente = cal.get(Calendar.YEAR);
+
+        dataLabel = DesignerGUI.creaJLabel(giornoCorrente + "/" + (meseCorrente + 1) + "/" + annoCorrente + " ");
+
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1);
+
+        scegliData = DesignerGUI.creaJButton("", new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                popup.show(scegliData, 0, scegliData.getHeight() + 3);
+            }
+        });
+        scegliData.setIcon(new ImageIcon("res/icons/calendar.png"));
+
+        add(dataLabel);
+        add(scegliData);
+
+        popup = DesignerGUI.creaJPopupMenu();
+        popup.setLightWeightPopupEnabled(false);
+        generaCalendario();
+    }
 
     /**
      * Ritorna il giorno selezionato
@@ -106,36 +135,6 @@ public class DateChooser extends JPanel {
      */
     public int getAnno() {
         return anno;
-    }
-
-    public DateChooser() {
-        super(new GridBagLayout());
-
-        cal = Calendar.getInstance();
-
-        giornoCorrente = cal.get(Calendar.DATE);
-        meseCorrente = cal.get(Calendar.MONTH);
-        annoCorrente = cal.get(Calendar.YEAR);
-
-        dataLabel = DesignerGUI.creaJLabel(giornoCorrente + "/" + meseCorrente + "/" + annoCorrente + " ");
-
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1);
-
-        scegliData = DesignerGUI.creaJButton("", new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                popup.show(scegliData, 0, scegliData.getHeight() + 3);
-            }
-        });
-        scegliData.setIcon(new ImageIcon("res/icons/calendar.png"));
-
-        add(dataLabel);
-        add(scegliData);
-
-        popup = DesignerGUI.creaJPopupMenu();
-        popup.setLightWeightPopupEnabled(false);
-        generaCalendario();
     }
 
     private void generaCalendario() {
@@ -177,6 +176,10 @@ public class DateChooser extends JPanel {
         calendario.add(meseLayout,
                 new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         popup.add(calendario);
+
+        anno = Calendar.getInstance().get(Calendar.YEAR);
+        mese = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        giorno = Calendar.getInstance().get(Calendar.DATE);
     }
 
     private void cambiaMese(int i) {
@@ -242,10 +245,10 @@ public class DateChooser extends JPanel {
 
     private class BottoneCalendario extends JButton {
 
-        private boolean giornataCorrente;
+        private final boolean giornataCorrente;
 
         public BottoneCalendario(int g, int m, int a, boolean giornataCorrente) {
-            super(g+"");
+            super(g + "");
             setBorder(new Bordo());
             this.giornataCorrente = giornataCorrente;
             addActionListener(new ActionListener() {
@@ -272,15 +275,15 @@ public class DateChooser extends JPanel {
             return giornataCorrente;
         }
 
-        private class Bordo extends FlatRoundBorder{
-            public Bordo(){
+        private class Bordo extends FlatRoundBorder {
+            public Bordo() {
                 super();
             }
 
             @Override
             public Insets getBorderInsets(Component c) {
                 Insets n = new FlatRoundBorder().getBorderInsets(c);
-                return new Insets(n.top,n.top,n.top,n.top);
+                return new Insets(n.top, n.top, n.top, n.top);
             }
         }
 
@@ -288,8 +291,8 @@ public class DateChooser extends JPanel {
 
     private class ArrowButton extends FlatArrowButton {
         public ArrowButton(int direzione) {
-            super( direzione, UIManager.getString( "Component.arrowType" ), UIManager.getColor( "ComboBox.buttonArrowColor" ), UIManager.getColor( "ComboBox.buttonDisabledArrowColor" ),
-                    UIManager.getColor( "ComboBox.buttonHoverArrowColor" ), null, UIManager.getColor( "ComboBox.buttonPressedArrowColor" ), null );
+            super(direzione, UIManager.getString("Component.arrowType"), UIManager.getColor("ComboBox.buttonArrowColor"), UIManager.getColor("ComboBox.buttonDisabledArrowColor"),
+                    UIManager.getColor("ComboBox.buttonHoverArrowColor"), null, UIManager.getColor("ComboBox.buttonPressedArrowColor"), null);
         }
     }
 

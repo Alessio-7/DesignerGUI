@@ -2,12 +2,9 @@ package designer;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
-import com.formdev.flatlaf.ui.FlatLineBorder;
-import com.formdev.flatlaf.ui.FlatMarginBorder;
 import themes.ADarcula;
 
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,24 +16,7 @@ public class DesignerGUI {
 
     public static final Dimension schermo = Toolkit.getDefaultToolkit().getScreenSize();
 
-    public enum Fonts {
-        GENERICO(new Font("Segoe UI", Font.PLAIN, 11)),
-        TITOLO(new Font("Segoe UI", Font.PLAIN, 23)),
-        TITOLO_SECONDARIO(new Font("Segoe UI", Font.PLAIN, 18)),
-        TITOLO_TERZIARIO(new Font("Segoe UI", Font.PLAIN, 13));
-
-        private Font f;
-
-        Fonts(Font f) {
-            this.f = f;
-        }
-
-        public Font getFont() {
-            return this.f;
-        }
-    }
-
-    public static void setupADarcula(){
+    public static void setupADarcula() {
         //ADarcula.
         ADarcula.setup();
     }
@@ -46,8 +26,9 @@ public class DesignerGUI {
         b.addActionListener(actionListener);
         return b;
     }
+
     public static JButton creaDefaultJButton(String testo, ActionListener actionListener) {
-        JButton b = new JButton(testo){
+        JButton b = new JButton(testo) {
             @Override
             public boolean isDefaultButton() {
                 return true;
@@ -56,7 +37,6 @@ public class DesignerGUI {
         b.addActionListener(actionListener);
         return b;
     }
-
 
     public static JCheckBox creaJCheckBox(String testo, boolean selezionato) {
         return new JCheckBox(testo, selezionato);
@@ -201,7 +181,6 @@ public class DesignerGUI {
         jScrollPane.setBorder(new FlatEmptyBorder());
         return jScrollPane;
     }
-
 
     public static JFrame creaJFrame(String titolo, JPanel child, boolean visibile) {
         return creaJFrame(titolo, child, null, visibile);
@@ -411,7 +390,6 @@ public class DesignerGUI {
         return l;
     }
 
-
     public static JPanel creaPasswordFieldSH() {
         return creaPasswordFieldSH(creaJPasswordField(10));
     }
@@ -419,7 +397,7 @@ public class DesignerGUI {
     public static JPanel creaPasswordFieldSH(JPasswordField pswField) {
 
         JButton sh = new JButton();
-        sh.setIcon(new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/show.svg" ));
+        sh.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/show.svg"));
         sh.addActionListener(new ActionListener() {
             boolean mostra = false;
 
@@ -469,8 +447,7 @@ public class DesignerGUI {
         JPanel grid2 = creaGridBagLayout();
         //grid2.setBackground(colori.suSfondo());
         grid2.add(grid, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 0, 5, 10), 0, 0));
-        grid.setBackground(UIManager.getColor("MenuBar.background"));
-        grid2.setBackground(UIManager.getColor("MenuBar.background"));
+        grid2.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIManager.getColor("MenuBar.borderColor")));
         return grid2;
     }
 
@@ -532,5 +509,22 @@ public class DesignerGUI {
 
     public static Form creaForm(String[] parametri, Component[] campiParametri) {
         return new Form(parametri, campiParametri);
+    }
+
+    public enum Fonts {
+        GENERICO(new Font("Segoe UI", Font.PLAIN, 11)),
+        TITOLO(new Font("Segoe UI", Font.PLAIN, 23)),
+        TITOLO_SECONDARIO(new Font("Segoe UI", Font.PLAIN, 18)),
+        TITOLO_TERZIARIO(new Font("Segoe UI", Font.PLAIN, 13));
+
+        private final Font f;
+
+        Fonts(Font f) {
+            this.f = f;
+        }
+
+        public Font getFont() {
+            return this.f;
+        }
     }
 }
